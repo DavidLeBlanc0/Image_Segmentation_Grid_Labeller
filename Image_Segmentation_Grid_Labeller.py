@@ -8,7 +8,7 @@ import os
 import sys
 import pickle
 
-from PMEL_Datum import PMEL_Datum
+from Datum import Datum
 
 # TODO: Move these to a shared config file
 NES_XRES = 240
@@ -18,10 +18,9 @@ GRID_SIZE = 15
 GRID_X_INTERVAL = np.floor(NES_XRES/GRID_SIZE)
 GRID_Y_INTERVAL = np.floor(NES_YRES/GRID_SIZE)
 
-class PMEL:
+class Image_Segmentation_Grid_Labeller:
 	"""
 	---------------------------------------------------------------------------
-	PlatformerMan Eyes Labeller (PMEL)
 	Creates a tkinter application that is capable of labelling screenshots of
 	platformers as a small pseudo-gridworld.
 	---------------------------------------------------------------------------
@@ -56,14 +55,14 @@ class PMEL:
 		self.imagePathList = []
 		self.filteredIndices = [] # Indices of imagePathList that meet filter
 		self.imageIndex = 0
-		self.dataDirectoryName = "PMEL_Data"
-		self.deleteDirectoryName = "PMEL_Deleted"
+		self.dataDirectoryName = "Data"
+		self.deleteDirectoryName = "Deleted"
 
 		self.selectedLabel = None
 		self.filterRadio = []
 		self.labelRadio = []
 		self.controlButtons = []
-		self.currentImage = "./nesTest2.png"
+		self.currentImage = "./mario_sample_image.png"
 		self.currentGrid  = np.zeros(shape = (GRID_SIZE, GRID_SIZE),dtype=int)
 		self.rootImgName = ""
 		self.root = None # Defined in main_window()
@@ -181,7 +180,7 @@ class PMEL:
 		unprocessedImage = Image.open(self.imagePathList[self.imageIndex])
 		unprocessedImage = np.asarray(unprocessedImage)
 		
-		datum = PMEL_Datum(unprocessedImage, self.currentGrid)
+		datum = Datum(unprocessedImage, self.currentGrid)
 
 
 		with open(self.get_current_data_path(), "wb") as f:
@@ -424,7 +423,7 @@ class PMEL:
 	def main_window(self):
 		# Window Params
 		self.root = Tk()
-		self.root.title("PMEL")
+		self.root.title("Labeller")
 		self.root.geometry("1200x800")
 		self.root.resizable(0,0)
 		self.root.configure(bg='black')
@@ -453,4 +452,4 @@ class PMEL:
 		self.root.mainloop()
 
 if __name__ == "__main__":
-	pmel = PMEL(debugMode = True)
+	main = Image_Segmentation_Grid_Labeller(debugMode = True)
